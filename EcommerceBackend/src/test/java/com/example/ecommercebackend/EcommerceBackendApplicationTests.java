@@ -1,10 +1,10 @@
-package com.example.ss2spring;
+package com.example.ecommercebackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Ss2SpringApplicationTests {
+class EcommerceBackendApplicationTests {
 
     @Test
     void contextLoads() {
