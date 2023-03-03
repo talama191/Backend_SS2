@@ -1,34 +1,21 @@
 package com.example.ecommercebackend.Product;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table
 public class Product {
     @Id
-    @Column
     private int ProductID;
-    @Column
     private String img1;
-    @Column
     private String long_description;
-    @Column
     private String name;
-    @Column
     private int price;
-    @Column
     private String short_description;
-    @Column
     private int category_id;
-    @Column
     private String img2;
-    @Column
     private String img3;
-    @Column
     private String img4;
 
     public int getProductID() {

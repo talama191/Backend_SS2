@@ -13,7 +13,6 @@ public class ProductController {
 
     @GetMapping("/Products")
     public List<Product> getAllProducts(){
-        System.out.println("a");
         return productService.getAllProducts();
     }
 
