@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 @Table
 public class Product {
     @Id
-    private int ProductID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String img1;
     private String long_description;
     private String name;
@@ -18,12 +19,12 @@ public class Product {
     private String img3;
     private String img4;
 
-    public int getProductID() {
-        return ProductID;
+    public int getId() {
+        return id;
     }
 
-    public void setProductID(int productID) {
-        ProductID = productID;
+    public void setId(int ID) {
+        this.id = ID;
     }
 
     public String getImg1() {

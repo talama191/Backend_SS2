@@ -28,6 +28,13 @@ public class UserService {
         return user;
     }
 
+    public User updateUser(User user) {
+        if (userRepository.existsById(user.getUser_id())) {
+            return userRepository.saveAndFlush(user);
+        }
+        return null;
+    }
+
     public User createUser(User user) {
 
         try {

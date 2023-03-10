@@ -8,6 +8,7 @@ import java.sql.Date;
 @Table
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_id;
     private String address;
     private Date dob;

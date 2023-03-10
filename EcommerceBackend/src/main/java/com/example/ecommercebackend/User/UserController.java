@@ -63,6 +63,19 @@ public class UserController {
         return null;
     }
 
+    @PostMapping("/User/Update")
+    public User updateUser(@RequestBody User user) {
+        if (user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
+            return null;
+        }
+        String originalPassword = user.getPassword();
+        String hashedPassword = Utils.get_SHA_512_SecurePassword(user.getPassword(), salt);
+        user.setPassword(hashedPassword);
+        userService.updateUser(user);
+        user.setPassword(originalPassword);
+        return user;
+    }
+
     @PostMapping("/User/Add")
     public boolean createUser(@RequestBody User user) {
         if (user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
