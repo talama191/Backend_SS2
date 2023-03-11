@@ -13,14 +13,14 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping("/Products")
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK)
     }
 
     @GetMapping("/Products/Category")
-    public List<Product> getProductsByCategory(@RequestParam int category_id) {
+    public ResponseEntity<List<Product>> getProductsByCategory(@RequestParam int category_id) {
         List<Product> products = productService.getProductsByCategory(category_id);
-        return products;
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @PostMapping("/Products/Add")
