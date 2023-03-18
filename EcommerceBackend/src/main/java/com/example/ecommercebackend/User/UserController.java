@@ -80,16 +80,17 @@ public class UserController {
     }
 
     @PostMapping("/User/Add")
-    public ResponseEntity<Boolean> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         if (user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         if (userService.getUserByUsername(user.getUsername()) == null) {
             user.setPassword(Utils.get_SHA_512_SecurePassword(user.getPassword(), salt));
             userService.createUser(user);
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            user.setPassword("");
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
-        return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(null, HttpStatus.CONFLICT);
     }
 
 

@@ -1,13 +1,17 @@
 package com.example.ecommercebackend.User;
 
+import com.example.ecommercebackend.Security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
@@ -43,5 +47,14 @@ public class UserService {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.getUserByUsername(username);
+        if (user == null) {
+            return null;
+        }
+        return new CustomUserDetails(user);
     }
 }
