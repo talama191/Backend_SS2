@@ -1,49 +1,60 @@
 package com.example.ecommercebackend.Security;
 
+import com.example.ecommercebackend.User.User;
 import io.jsonwebtoken.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    private final String JWT_SECRET = "default_key";
-    private final long JWT_EXPIRATION = 604800000L;
+    private static final long EXPIRE_DURATION = 24 * 60 * 60 * 1000; // 24 hour
 
-    public String generateToken(CustomUserDetails userDetails) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
+    @Value("${app.jwt.secret}")
+    private String SECRET_KEY;
+
+    public String generateAccessToken(User user) {
         return Jwts.builder()
-                .setSubject(Long.toString(userDetails.getUser().getUser_id()))
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+                .setSubject(String.format("%s,%s", user.getUser_id(), user.getPassword()))
+                .setIssuer("Talama")
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
 
     }
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-    public Long getUserIdFromJWT(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(JWT_SECRET)
-                .parseClaimsJws(token)
-                .getBody();
+    public boolean validateAccessToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException ex) {
+            LOGGER.error("JWT expired", ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            LOGGER.error("Token is null, empty or only whitespace", ex.getMessage());
+        } catch (MalformedJwtException ex) {
+            LOGGER.error("JWT is invalid", ex);
+        } catch (UnsupportedJwtException ex) {
+            LOGGER.error("JWT is not supported", ex);
+        } catch (SignatureException ex) {
+            LOGGER.error("Signature validation failed");
+        }
 
-        return Long.parseLong(claims.getSubject());
+        return false;
     }
 
-    public boolean validateToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
-            return true;
-        } catch (MalformedJwtException ex) {
-            ex.printStackTrace();
-        } catch (ExpiredJwtException ex) {
-            ex.printStackTrace();
-        } catch (UnsupportedJwtException ex) {
-            ex.printStackTrace();
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        }
-        return false;
+    public String getSubject(String token) {
+        return parseClaims(token).getSubject();
+    }
+
+    private Claims parseClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
