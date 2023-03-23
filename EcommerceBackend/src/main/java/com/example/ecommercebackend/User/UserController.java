@@ -18,17 +18,16 @@ import java.util.List;
 
 @RestController
 public class UserController {
-    private static String salt = "alo";
     @Autowired
     UserService userService;
 
-    @GetMapping("/Users")
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
 
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @GetMapping("/User")
+    @GetMapping("/user")
     public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
 
         User user = userService.getUserByEmail(email);
@@ -38,7 +37,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/User/Get")
+    @GetMapping("/user/get")
     public ResponseEntity<User> getUserByUsername(@RequestParam String username) {
 
         User user = userService.getUserByEmail(username);
@@ -53,7 +52,7 @@ public class UserController {
     AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-    @PostMapping("/UserAuth/Authenticate")
+    @PostMapping("/user-auth/authenticate")
     public ResponseEntity<?> AuthenticateUser(@RequestBody User user) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -72,7 +71,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/User/Update")
+    @PostMapping("/user/update")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         if (user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -88,7 +87,7 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @PostMapping("/UserRegister/Register")
+    @PostMapping("/user-register/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         if ( user.getPassword()==null||user.getUsername()==null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

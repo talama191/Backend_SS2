@@ -74,22 +74,22 @@ public class SecurityConfig {
 
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/Product").permitAll() // với endpoint /hello thì sẽ được cho qua
+                .requestMatchers("/product").permitAll() // với endpoint /hello thì sẽ được cho qua
                 .and().authorizeHttpRequests()
-                .requestMatchers("/Products").permitAll() // với endpoint /hello thì sẽ được cho qua
+                .requestMatchers("/products").permitAll() // với endpoint /hello thì sẽ được cho qua
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/Users").authenticated()
+                .requestMatchers("/users").authenticated()
                 .and().formLogin()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/User/**").authenticated()
+                .requestMatchers("/user/**").authenticated()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/UserAuth/Authenticate").permitAll()
+                .requestMatchers("/user-auth/authenticate").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/UserRegister/Register").permitAll();
+                .requestMatchers("/user-register/register").permitAll();
         http.exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {

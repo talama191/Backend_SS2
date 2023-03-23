@@ -12,18 +12,18 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @GetMapping("/Products")
+    @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProducts() {
         return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
     }
 
-    @GetMapping("/Products/Category")
+    @GetMapping("/products/category")
     public ResponseEntity<List<Product>> getProductsByCategory(@RequestParam int category_id) {
         List<Product> products = productService.getProductsByCategory(category_id);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PostMapping("/Products/Add")
+    @PostMapping("/products/add")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
         Product returnProduct = productService.addProduct(product);
         if (returnProduct == null) {
@@ -32,7 +32,7 @@ public class ProductController {
         return new ResponseEntity<>(returnProduct, HttpStatus.OK);
     }
 
-    @PostMapping("/Products/Update")
+    @PostMapping("/products/update")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
         Product returnProduct = productService.updateProduct(product);
         if (returnProduct == null) {
@@ -41,7 +41,7 @@ public class ProductController {
         return new ResponseEntity<>(returnProduct, HttpStatus.OK);
     }
 
-    @DeleteMapping("/Products/Delete")
+    @DeleteMapping("/products/delete")
     public ResponseEntity<Boolean> deleteProduct(@RequestParam int id) {
         int lineDeleted = productService.deleteProduct(id);
         if (lineDeleted == 0) {
