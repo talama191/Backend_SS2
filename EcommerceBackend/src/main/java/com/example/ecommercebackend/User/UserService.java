@@ -1,11 +1,9 @@
 package com.example.ecommercebackend.User;
 
-import com.example.ecommercebackend.Security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -57,6 +55,6 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             return null;
         }
-        return new CustomUserDetails(user);
+        return user;
     }
 }

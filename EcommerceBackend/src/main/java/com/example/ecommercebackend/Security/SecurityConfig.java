@@ -83,10 +83,13 @@ public class SecurityConfig {
                 .and().formLogin()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/User/**").permitAll()
+                .requestMatchers("/User/**").authenticated()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/UserAuth/Authenticate").permitAll();
+                .requestMatchers("/UserAuth/Authenticate").permitAll()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/UserRegister/Register").permitAll();
         http.exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {

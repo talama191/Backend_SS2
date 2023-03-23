@@ -61,7 +61,6 @@ public class UserController {
                             user.getUsername(), user.getPassword())
             );
 
-//            User newUser = (User) authentication.getPrincipal();
             String accessToken = jwtTokenProvider.generateAccessToken(user);
             AuthResponse response = new AuthResponse(user.getEmail(), accessToken);
 
@@ -71,29 +70,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-//        String userPassword = Utils.get_SHA_512_SecurePassword(user.getPassword(), salt);
-//        UsernamePasswordAuthenticationToken token=new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-//        Authentication authentication = authenticationManager.authenticate(token);
-//
-//        if (authentication.isAuthenticated()) {
-//            return new ResponseEntity<>(token, HttpStatus.OK);
-//        }
-//
-//        return new ResponseEntity<>(token, HttpStatus.BAD_REQUEST);
-
-//        if (user.getPassword()==null) {
-//            return null;
-//        }
-//        User dbUser = userService.getUserByUsername(user.getUsername());
-//        if (dbUser != null) {
-//            String inputPassword = Utils.get_SHA_512_SecurePassword(user.getPassword(), salt);
-//            String dbPassword = dbUser.getPassword();
-//            if (inputPassword.equals(dbPassword)) {
-//                dbUser.setPassword("");
-//                return new ResponseEntity<>(dbUser, HttpStatus.OK);
-//            }
-//        }
-//        return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/User/Update")
@@ -102,7 +78,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         String originalPassword = user.getPassword();
-        String hashedPassword = Utils.get_SHA_512_SecurePassword(user.getPassword(), salt);
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         userService.updateUser(user);
         user.setPassword(originalPassword);
@@ -112,9 +88,9 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @PostMapping("/User/Add")
+    @PostMapping("/UserRegister/Register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        if ( user.getPassword()==null) {
+        if ( user.getPassword()==null||user.getUsername()==null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         if (userService.getUserByUsername(user.getUsername()) == null) {
