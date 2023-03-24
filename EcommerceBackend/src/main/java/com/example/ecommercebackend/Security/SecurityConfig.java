@@ -74,16 +74,15 @@ public class SecurityConfig {
 
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/product").hasAuthority("ADMIN")
+                .requestMatchers("/product").hasRole("ADMIN")
                 .and().authorizeHttpRequests()
                 .requestMatchers("/products").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/users").hasAuthority("ADMIN")
-                .and().formLogin()
+                .requestMatchers("/users").hasRole("ADMIN")
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/user/**").hasAuthority("ADMIN")
+                .requestMatchers("/user/**").hasRole("ADMIN")
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/user-auth/authenticate").permitAll()
@@ -101,7 +100,7 @@ public class SecurityConfig {
                 );
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.authenticationProvider(daoAuthenticationProvider());
+        http.authenticationProvider(authProvider());
         return http.build();
     }
 }

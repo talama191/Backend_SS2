@@ -57,10 +57,6 @@ public class UserController {
     @PostMapping("/user-auth/authenticate")
     public ResponseEntity<?> AuthenticateUser(@RequestBody User user) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.getUsername(), user.getPassword())
-            );
             User dbUser = userService.getUserByUsername(user.getUsername());
             int user_role = userService.getUserRoleByUserID(dbUser.getUser_id());
 

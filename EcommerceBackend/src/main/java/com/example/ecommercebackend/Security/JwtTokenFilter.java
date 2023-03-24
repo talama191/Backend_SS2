@@ -59,10 +59,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     private void setAuthenticationContext(String token, HttpServletRequest request) {
+
         UserDetails userDetails = getUserDetails(token);
 
+
         UsernamePasswordAuthenticationToken
-                authentication = new UsernamePasswordAuthenticationToken(userDetails, null, null);
+                authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         authentication.setDetails(
                 new WebAuthenticationDetailsSource().buildDetails(request));
@@ -76,7 +78,17 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         userDetails.setUser_id(Integer.parseInt(jwtSubject[0]));
         userDetails.setEmail(jwtSubject[1]);
-
+        String role_str = jwtUtil.getRoleFromToken(token);
+        int role_id = 0;
+        switch (role_str) {
+            case "ROLE_ADMIN":
+                role_id = 1;
+                break;
+            case "ROLE_USER":
+                role_id = 2;
+                break;
+        }
+        userDetails.setRole_id(role_id);
         return userDetails;
     }
 }

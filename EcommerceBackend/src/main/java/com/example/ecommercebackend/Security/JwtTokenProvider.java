@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -20,13 +21,13 @@ public class JwtTokenProvider {
         String role_id_str = "";
         switch (role_id) {
             case 1:
-                role_id_str = "USER";
+                role_id_str = "ROLE_ADMIN";
                 break;
             case 2:
-                role_id_str = "ADMIN";
+                role_id_str = "ROLE_USER";
                 break;
             default:
-                role_id_str = "USER";
+                role_id_str = "ROLE_USER";
                 break;
         }
 
@@ -44,8 +45,9 @@ public class JwtTokenProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     public boolean validateAccessToken(String token) {
+
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            var a = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException ex) {
             LOGGER.error("JWT expired", ex.getMessage());
@@ -60,6 +62,18 @@ public class JwtTokenProvider {
         }
 
         return false;
+    }
+
+    public String getRoleFromToken(String token) {
+        try {
+            Jws<Claims> a = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            var body = a.getBody();
+            String role_str = (String) body.get("roles");
+            return role_str;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "";
     }
 
     public String getSubject(String token) {

@@ -2,10 +2,13 @@ package com.example.ecommercebackend.User;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table
@@ -21,6 +24,16 @@ public class User implements UserDetails {
     private String password;
     private String phone_number;
     private String username;
+    private int role_id;
+    public int getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(int role_id) {
+        this.role_id = role_id;
+    }
+
+
 
     public String getPhone_number() {
         return phone_number;
@@ -108,7 +121,19 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        switch (getRole_id()){
+            case 1:
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                break;
+            case 2:
+                authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                break;
+        }
+
+        return  authorities;
     }
 
     public String getPassword() {
