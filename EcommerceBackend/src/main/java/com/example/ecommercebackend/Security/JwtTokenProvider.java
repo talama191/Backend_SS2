@@ -16,16 +16,31 @@ public class JwtTokenProvider {
     @Value("${app.jwt.secret}")
     private String SECRET_KEY;
 
-    public String generateAccessToken(User user) {
+    public String generateAccessToken(User user, int role_id) {
+        String role_id_str = "";
+        switch (role_id) {
+            case 1:
+                role_id_str = "USER";
+                break;
+            case 2:
+                role_id_str = "ADMIN";
+                break;
+            default:
+                role_id_str = "USER";
+                break;
+        }
+
         return Jwts.builder()
                 .setSubject(String.format("%s,%s", user.getUser_id(), user.getPassword()))
                 .setIssuer("Talama")
+                .claim("roles", role_id_str)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
 
     }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     public boolean validateAccessToken(String token) {

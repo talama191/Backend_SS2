@@ -27,6 +27,14 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public int getUserRoleByUserID(int id) {
+        return userRepository.getRoleByUserID(id);
+    }
+
+    public void setUserRole(int user_id, int role_id) {
+         userRepository.setUserRole(user_id, role_id);
+    }
+
     public User getUserByUsername(String username) {
         User user = userRepository.getUserByUsername(username);
         return user;

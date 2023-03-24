@@ -3,6 +3,16 @@ package com.example.ecommercebackend.Security;
 public class AuthResponse {
     private String username;
     private String accessToken;
+    private int userRole;
+
+    public int getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(int userRole) {
+        this.userRole = userRole;
+    }
+
 
     public String getUsername() {
         return username;
@@ -20,11 +30,13 @@ public class AuthResponse {
         this.accessToken = accessToken;
     }
 
-    public AuthResponse() { }
+    public AuthResponse() {
+    }
 
-    public AuthResponse(String email, String accessToken) {
+    public AuthResponse(String email, String accessToken, int userRole) {
         this.username = email;
         this.accessToken = accessToken;
+        this.userRole=userRole;
     }
 
     // getters and setters are not shown...

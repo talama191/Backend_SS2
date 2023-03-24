@@ -53,6 +53,7 @@ public class UserController {
     AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
     @PostMapping("/user-auth/authenticate")
     public ResponseEntity<?> AuthenticateUser(@RequestBody User user) {
         try {
@@ -60,9 +61,11 @@ public class UserController {
                     new UsernamePasswordAuthenticationToken(
                             user.getUsername(), user.getPassword())
             );
+            User dbUser = userService.getUserByUsername(user.getUsername());
+            int user_role = userService.getUserRoleByUserID(dbUser.getUser_id());
 
-            String accessToken = jwtTokenProvider.generateAccessToken(user);
-            AuthResponse response = new AuthResponse(user.getEmail(), accessToken);
+            String accessToken = jwtTokenProvider.generateAccessToken(user, user_role);
+            AuthResponse response = new AuthResponse(user.getEmail(), accessToken, user_role);
 
             return ResponseEntity.ok().body(response);
 
@@ -90,17 +93,32 @@ public class UserController {
 
     @PostMapping("/user-register/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        if ( user.getPassword()==null||user.getUsername()==null) {
+        if (user.getPassword() == null || user.getUsername() == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         if (userService.getUserByUsername(user.getUsername()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.createUser(user);
+            userService.setUserRole(user.getUser_id(), 2);
             user.setPassword("");
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.CONFLICT);
     }
 
+    @PostMapping("/user-register/register-admin")
+    public ResponseEntity<User> createAdmin(@RequestBody User user) {
+        if (user.getPassword() == null || user.getUsername() == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        if (userService.getUserByUsername(user.getUsername()) == null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userService.createUser(user);
+            userService.setUserRole(user.getUser_id(), 1);
+            user.setPassword("");
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+    }
 
 }
