@@ -1,5 +1,6 @@
 package com.example.ecommercebackend.Product;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +44,9 @@ public class ProductController {
     }
 
     @DeleteMapping("/products/delete")
-    public ResponseEntity<Boolean> deleteProduct(@RequestParam int id) {
-        int lineDeleted = productService.deleteProduct(id);
-        if (lineDeleted == 0) {
+    public ResponseEntity<Boolean> deleteProduct(@RequestParam List<Integer> ids) {
+        boolean isDeleted = productService.deleteProduct(ids);
+        if (!isDeleted) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(true, HttpStatus.OK);
