@@ -41,7 +41,12 @@ public class ProductService {
     }
 
     @Transactional
-    public int deleteProduct(int id) {
-        return productRepository.deleteProductByID(id);
+    public boolean deleteProduct(List<Integer> ids) {
+        try {
+            productRepository.deleteAllIds(ids);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }
