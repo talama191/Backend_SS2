@@ -1,5 +1,6 @@
 package com.example.ecommercebackend.Product;
 
+import com.example.ecommercebackend.Response.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,41 +15,41 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
+    public ResponseData getAllProducts() {
+        return new ResponseData(productService.getAllProducts(), 200, HttpStatus.OK);
     }
 
     @GetMapping("/products/category")
-    public ResponseEntity<List<Product>> getProductsByCategory(@RequestParam int category_id) {
+    public ResponseData getProductsByCategory(@RequestParam int category_id) {
         List<Product> products = productService.getProductsByCategory(category_id);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return new ResponseData(products, 200, HttpStatus.OK);
     }
 
     @PostMapping("/products/add")
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+    public ResponseData addProduct(@RequestBody Product product) {
         Product returnProduct = productService.addProduct(product);
         if (returnProduct == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(returnProduct, HttpStatus.OK);
+        return new ResponseData(returnProduct, 201, HttpStatus.CREATED);
     }
 
     @PostMapping("/products/update")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
+    public ResponseData updateProduct(@RequestBody Product product) {
         Product returnProduct = productService.updateProduct(product);
         if (returnProduct == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(returnProduct, HttpStatus.OK);
+        return new ResponseData(returnProduct, 200, HttpStatus.OK);
     }
 
     @DeleteMapping("/products/delete")
-    public ResponseEntity<Boolean> deleteProduct(@RequestParam int id) {
+    public ResponseData deleteProduct(@RequestParam int id) {
         int lineDeleted = productService.deleteProduct(id);
         if (lineDeleted == 0) {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            return new ResponseData(false, 400, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return new ResponseData(true, 200, HttpStatus.OK);
     }
 
 }
