@@ -77,6 +77,8 @@ public class SecurityConfig {
                 .requestMatchers("/product").hasRole("ADMIN")
                 .and().authorizeHttpRequests()
                 .requestMatchers("/products").permitAll()
+                .and().authorizeHttpRequests()
+                .requestMatchers("/products/**").permitAll()
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/users").hasRole("ADMIN")
