@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.Product;
+package com.example.ecommercebackend.Entities.Product;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

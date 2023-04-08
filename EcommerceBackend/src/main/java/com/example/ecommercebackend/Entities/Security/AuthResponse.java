@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.Security;
+package com.example.ecommercebackend.Entities.Security;
 
 public class AuthResponse {
     private String username;
