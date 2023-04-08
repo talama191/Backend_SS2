@@ -1,5 +1,6 @@
 package com.example.ecommercebackend.User;
 
+import com.example.ecommercebackend.Response.ResponseData;
 import com.example.ecommercebackend.Security.AuthResponse;
 import com.example.ecommercebackend.Security.JwtTokenProvider;
 import com.example.ecommercebackend.Utils.Utils;
@@ -23,30 +24,30 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseData getAllUsers() {
 
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        return new ResponseData(userService.getAllUsers(), 200, HttpStatus.OK);
     }
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+    public ResponseData getUserByEmail(@RequestParam String email) {
 
         User user = userService.getUserByEmail(email);
         if (user == null) {
-
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseData(user, 200, HttpStatus.OK);
     }
 
     @GetMapping("/user/get")
-    public ResponseEntity<User> getUserByUsername(@RequestParam String username) {
+    public ResponseData getUserByUsername(@RequestParam String username) {
 
         User user = userService.getUserByEmail(username);
         user.setPassword("");
         if (user == null) {
-            System.out.println("User not found");
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseData(user, 200, HttpStatus.OK);
     }
 
     @Autowired
@@ -55,7 +56,7 @@ public class UserController {
     private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/user-auth/authenticate")
-    public ResponseEntity<?> AuthenticateUser(@RequestBody User user) {
+    public ResponseData AuthenticateUser(@RequestBody User user) {
         try {
             User dbUser = userService.getUserByUsername(user.getUsername());
             int user_role = userService.getUserRoleByUserID(dbUser.getUser_id());
@@ -63,58 +64,58 @@ public class UserController {
             String accessToken = jwtTokenProvider.generateAccessToken(user, user_role);
             AuthResponse response = new AuthResponse(user.getEmail(), accessToken, user_role);
 
-            return ResponseEntity.ok().body(response);
+            return new ResponseData(response, 200, HttpStatus.OK);
 
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @PostMapping("/user/update")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseData updateUser(@RequestBody User user) {
         if (user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
         String originalPassword = user.getPassword();
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         userService.updateUser(user);
         user.setPassword(originalPassword);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseData(user, 200, HttpStatus.OK);
     }
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/user-register/register")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseData createUser(@RequestBody User user) {
         if (user.getPassword() == null || user.getUsername() == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
         if (userService.getUserByUsername(user.getUsername()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.createUser(user);
             userService.setUserRole(user.getUser_id(), 2);
             user.setPassword("");
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseData(user, 201, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        return new ResponseData(null, 409, HttpStatus.CONFLICT);
     }
 
     @PostMapping("/user-register/register-admin")
-    public ResponseEntity<User> createAdmin(@RequestBody User user) {
+    public ResponseData createAdmin(@RequestBody User user) {
         if (user.getPassword() == null || user.getUsername() == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
         if (userService.getUserByUsername(user.getUsername()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.createUser(user);
             userService.setUserRole(user.getUser_id(), 1);
             user.setPassword("");
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseData(user, 201, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        return new ResponseData(null, 409, HttpStatus.CONFLICT);
     }
 
 }

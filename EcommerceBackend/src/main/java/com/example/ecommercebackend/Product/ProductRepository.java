@@ -14,6 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "delete from Product p  where p.id=?1")
-    public int deleteProductByID(int id);
+//    @Query(value = "delete from Product p  where p.id=?1")
+    @Query("delete from Product p where p.id in(:integers)")
+    void deleteAllIds(List<Integer> integers);
 }
