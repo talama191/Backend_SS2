@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.User;
+package com.example.ecommercebackend.Entities.User;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;

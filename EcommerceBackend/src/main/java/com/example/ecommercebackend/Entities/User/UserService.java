@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.User;
+package com.example.ecommercebackend.Entities.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

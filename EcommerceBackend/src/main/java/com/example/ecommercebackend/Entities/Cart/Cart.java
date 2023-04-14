@@ -1,6 +1,5 @@
 package com.example.ecommercebackend.Entities.Cart;
 
-import com.example.ecommercebackend.User.User;
 import jakarta.persistence.*;
 
 @Entity

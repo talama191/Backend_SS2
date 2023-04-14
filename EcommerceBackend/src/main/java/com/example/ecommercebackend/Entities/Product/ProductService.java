@@ -1,7 +1,10 @@
 package com.example.ecommercebackend.Entities.Product;
 
+import com.example.ecommercebackend.Entities.SearchFilter.ProductSearchFilter;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,5 +51,28 @@ public class ProductService {
             return false;
         }
         return true;
+    }
+
+    private List<Integer> inCaseOfEmptyList = new ArrayList<>();
+
+    public ProductService() {
+        super();
+        for (int i = 0; i < 100; i++) {
+            inCaseOfEmptyList.add(i);
+        }
+    }
+
+    public List<Product> searchProduct(ProductSearchFilter filter) {
+
+        if (filter.getBrand_ids() == null) {
+            filter.setBrand_ids(inCaseOfEmptyList);
+        }
+        if (filter.getCategory_ids() == null) {
+            filter.setCategory_ids(inCaseOfEmptyList);
+        }
+        Pageable pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+        List<Product> products = productRepository.findAllByName(filter, pageable);
+
+        return products;
     }
 }

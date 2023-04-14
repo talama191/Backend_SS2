@@ -1,6 +1,6 @@
 package com.example.ecommercebackend.Entities.Security;
 
-import com.example.ecommercebackend.User.UserService;
+import com.example.ecommercebackend.Entities.User.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

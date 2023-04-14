@@ -1,6 +1,6 @@
 package com.example.ecommercebackend.Entities.Security;
 
-import com.example.ecommercebackend.User.User;
+import com.example.ecommercebackend.Entities.User.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

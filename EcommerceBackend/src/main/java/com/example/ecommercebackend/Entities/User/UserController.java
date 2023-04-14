@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.User;
+package com.example.ecommercebackend.Entities.User;
 
 import com.example.ecommercebackend.Response.ResponseData;
 import com.example.ecommercebackend.Entities.Security.AuthResponse;
