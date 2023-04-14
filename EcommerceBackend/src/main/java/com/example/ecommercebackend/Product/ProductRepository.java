@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-    @Query(value = "select * from product where product.category_id=?1", nativeQuery = true)
-    public Product getProductsByCategory(int category);
+    @Query(value = "select * from product p where p.category_id=?1", nativeQuery = true)
+    public List<Product> getProductsByCategory(int category);
 
     @Transactional
     @Modifying
