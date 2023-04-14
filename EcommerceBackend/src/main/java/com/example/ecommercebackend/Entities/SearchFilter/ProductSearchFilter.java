@@ -11,8 +11,28 @@ public class ProductSearchFilter {
     private List<Integer> brand_ids;
     private Integer perPage;
     private Integer pageNum;
+    private String sortType;
+    private String sortField;
+
+    public String getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
+    }
+
 
     public ProductSearchFilter() {
+
     }
 
     public ProductSearchFilter(String keyword) {
@@ -21,7 +41,7 @@ public class ProductSearchFilter {
 
 
     public String getKeyword() {
-        return "%"+keyword+"%";
+        return "%" + keyword + "%";
     }
 
     public void setKeyword(String keyword) {

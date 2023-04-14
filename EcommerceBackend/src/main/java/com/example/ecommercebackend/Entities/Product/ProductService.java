@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -70,7 +71,30 @@ public class ProductService {
         if (filter.getCategory_ids() == null) {
             filter.setCategory_ids(inCaseOfEmptyList);
         }
-        Pageable pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+        Pageable pageable;
+
+        if (filter.getSortField() == null) {
+            pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+        } else {
+            if (filter.getSortField().isEmpty()) {
+                pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+            } else {
+                if (filter.getSortType() != null || !filter.getSortType().isEmpty()) {
+                    if (filter.getSortType().equals("asc")) {
+                        pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage(), Sort.by(filter.getSortField()).ascending());
+                    } else if (filter.getSortType().equals("des")) {
+                        pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage(), Sort.by(filter.getSortField()).descending());
+                    } else {
+                        pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+                    }
+                } else {
+                    pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+                }
+
+            }
+        }
+
+
         List<Product> products = productRepository.findAllByName(filter, pageable);
 
         return products;
