@@ -20,7 +20,7 @@ public class ProductService {
 
     public List<Product> getProductsByCategory(int category_id) {
         List<Product> products = new ArrayList<>();
-        productRepository.getProductsByCategory(category_id);
+        products = productRepository.getProductsByCategory(category_id);
         return products;
     }
 
