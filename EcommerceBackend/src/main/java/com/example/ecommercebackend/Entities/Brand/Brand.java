@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.Brand;
+package com.example.ecommercebackend.Entities.Brand;
 
 import jakarta.persistence.*;
 
