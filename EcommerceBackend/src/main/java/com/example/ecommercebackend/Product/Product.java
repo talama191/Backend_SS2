@@ -1,6 +1,8 @@
 package com.example.ecommercebackend.Product;
 
 
+import com.example.ecommercebackend.Brand.Brand;
+import com.example.ecommercebackend.Category.Category;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,10 +16,23 @@ public class Product {
     private String name;
     private int price;
     private String short_description;
-    private int category_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
     private String img2;
     private String img3;
     private String img4;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id", referencedColumnName = "id")
+    private Brand brand;
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
 
     public int getId() {
         return id;
@@ -67,12 +82,12 @@ public class Product {
         this.short_description = short_description;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
+    public void setCategory(Category category_id) {
+        this.category = category_id;
     }
 
     public String getImg2() {
