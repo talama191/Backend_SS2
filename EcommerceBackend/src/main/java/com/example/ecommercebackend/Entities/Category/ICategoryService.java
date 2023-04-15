@@ -1,7 +1,7 @@
-package com.example.ecommercebackend.Category;
+package com.example.ecommercebackend.Entities.Category;
 
-import com.example.ecommercebackend.Category.Category;
+import com.example.ecommercebackend.Entities.Category.Category;
 
-public interface ICategoryService extends IGeneralService<Category> {
+public interface ICategoryService extends com.example.ecommercebackend.Category.IGeneralService<Category> {
 
 }
