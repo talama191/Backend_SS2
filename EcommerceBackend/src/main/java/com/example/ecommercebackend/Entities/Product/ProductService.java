@@ -93,8 +93,6 @@ public class ProductService {
 
             }
         }
-
-
         List<Product> products = productRepository.findAllByName(filter, pageable);
 
         return products;

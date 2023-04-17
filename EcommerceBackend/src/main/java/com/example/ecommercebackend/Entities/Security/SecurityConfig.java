@@ -84,10 +84,13 @@ public class SecurityConfig {
                 .requestMatchers("/user-register/**").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/cart").permitAll()
+                .requestMatchers("/carts").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/cart/**").permitAll();
+                .requestMatchers("/carts/**").permitAll()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/brands/**").permitAll();
         http.exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {
