@@ -90,7 +90,10 @@ public class SecurityConfig {
                 .requestMatchers("/carts/**").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/brands/**").permitAll();
+                .requestMatchers("/brands/**").permitAll()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/cart_lines/**").permitAll();
         http.exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {

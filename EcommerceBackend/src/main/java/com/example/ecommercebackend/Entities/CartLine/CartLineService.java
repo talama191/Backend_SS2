@@ -11,6 +11,9 @@ public class CartLineService {
     @Autowired
     CartLineRepository cartLineRepository;
 
+    public List<CartLine> getAllCartLines(){
+        return cartLineRepository.findAll();
+    }
     public List<CartLine> getCartLinesByCartID(int cart_id){
         return cartLineRepository.getCartLinesByCart_id(cart_id);
     }
