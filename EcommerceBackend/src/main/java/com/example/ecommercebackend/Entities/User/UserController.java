@@ -1,8 +1,8 @@
 package com.example.ecommercebackend.Entities.User;
 
 import com.example.ecommercebackend.Response.ResponseData;
-import com.example.ecommercebackend.Entities.Security.AuthResponse;
-import com.example.ecommercebackend.Entities.Security.JwtTokenProvider;
+import com.example.ecommercebackend.Security.AuthResponse;
+import com.example.ecommercebackend.Security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;

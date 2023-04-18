@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.Entities.Security;
+package com.example.ecommercebackend.Security;
 
 import com.example.ecommercebackend.Entities.User.User;
 import io.jsonwebtoken.*;

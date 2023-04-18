@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.Entities.Security;
+package com.example.ecommercebackend.Security;
 
 import java.io.IOException;
 
