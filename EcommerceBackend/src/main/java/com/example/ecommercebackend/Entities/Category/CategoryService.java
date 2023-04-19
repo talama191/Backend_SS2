@@ -30,7 +30,7 @@ public class CategoryService implements ICategoryService {
         categoryRepository.deleteById(id);
     }
 
-    public Category updateProduct(Category category) {
+    public Category updateCategory(Category category) {
         if (categoryRepository.existsById(category.getId())) {
             return categoryRepository.saveAndFlush(category);
         }
