@@ -1,5 +1,6 @@
 package com.example.ecommercebackend.Category;
 
+import com.example.ecommercebackend.Product.Product;
 import com.example.ecommercebackend.Response.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/categories")
 public class CategoryController {
     @Autowired
@@ -22,6 +23,16 @@ public class CategoryController {
     @PostMapping("/create")
     public ResponseData createNewCategory(@RequestBody Category category) {
         return new ResponseData(categoryService.save(category),200, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseData updateCategory(@RequestBody Category category) {
+        Category returnCat = categoryService.updateProduct(category);
+        System.out.println(returnCat);
+        if (returnCat == null) {
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseData(returnCat, 200, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
