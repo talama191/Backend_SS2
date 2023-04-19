@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.Category;
+package com.example.ecommercebackend.Entities.Category;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

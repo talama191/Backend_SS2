@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.Category;
+package com.example.ecommercebackend.Entities.Category;
 
 import com.example.ecommercebackend.Product.Product;
 import com.example.ecommercebackend.Response.ResponseData;

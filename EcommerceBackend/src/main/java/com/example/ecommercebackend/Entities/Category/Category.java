@@ -1,4 +1,4 @@
-package com.example.ecommercebackend.Category;
+package com.example.ecommercebackend.Entities.Category;
 
 import jakarta.persistence.*;
 
@@ -7,14 +7,14 @@ import jakarta.persistence.*;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String name;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

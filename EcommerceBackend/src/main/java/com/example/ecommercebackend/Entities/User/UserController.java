@@ -1,21 +1,14 @@
-package com.example.ecommercebackend.User;
+package com.example.ecommercebackend.Entities.User;
 
 import com.example.ecommercebackend.Response.ResponseData;
-import com.example.ecommercebackend.Security.AuthResponse;
-import com.example.ecommercebackend.Security.JwtTokenProvider;
-import com.example.ecommercebackend.Utils.Utils;
+import com.example.ecommercebackend.Entities.Security.AuthResponse;
+import com.example.ecommercebackend.Entities.Security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)

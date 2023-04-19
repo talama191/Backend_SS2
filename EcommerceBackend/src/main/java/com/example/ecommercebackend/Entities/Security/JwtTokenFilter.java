@@ -1,9 +1,9 @@
-package com.example.ecommercebackend.Security;
+package com.example.ecommercebackend.Entities.Security;
 
 import java.io.IOException;
 
 
-import com.example.ecommercebackend.User.User;
+import com.example.ecommercebackend.Entities.User.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

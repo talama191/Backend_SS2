@@ -1,8 +1,8 @@
-package com.example.ecommercebackend.Product;
+package com.example.ecommercebackend.Entities.Product;
 
 
-import com.example.ecommercebackend.Brand.Brand;
-import com.example.ecommercebackend.Category.Category;
+import com.example.ecommercebackend.Entities.Brand.Brand;
+import com.example.ecommercebackend.Entities.Category.Category;
 import jakarta.persistence.*;
 
 @Entity
