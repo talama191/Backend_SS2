@@ -1,6 +1,5 @@
 package com.example.ecommercebackend.Entities.Category;
 
-import com.example.ecommercebackend.Product.Product;
 import com.example.ecommercebackend.Response.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class CategoryController {
         return new ResponseData(categoryService.save(category),200, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping(value = "/update/{id}", consumes = "application/json")
     public ResponseData updateCategory(@RequestBody Category category) {
         Category returnCat = categoryService.updateProduct(category);
         System.out.println(returnCat);
