@@ -1,8 +1,10 @@
 package com.example.ecommercebackend.Entities.Category;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -37,5 +39,10 @@ public class CategoryService implements ICategoryService {
         return null;
     }
 
+    @Transactional
+    @Override
+    public void deleteBulkCategory(Integer[] ids) {
+        categoryRepository.deleteCategoriesByIds(Arrays.asList(ids));
+    }
 
 }
