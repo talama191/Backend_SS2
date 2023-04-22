@@ -54,7 +54,7 @@ public class UserController {
             User dbUser = userService.getUserByUsername(user.getUsername());
             int user_role = userService.getUserRoleByUserID(dbUser.getUser_id());
 
-            String accessToken = jwtTokenProvider.generateAccessToken(user, user_role);
+            String accessToken = jwtTokenProvider.generateAccessToken(dbUser, user_role);
             AuthResponse response = new AuthResponse(user.getEmail(), accessToken, user_role);
 
             return new ResponseData(response, 200, HttpStatus.OK);

@@ -77,7 +77,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String[] jwtSubject = jwtUtil.getSubject(token).split(",");
 
         userDetails.setUser_id(Integer.parseInt(jwtSubject[0]));
-        userDetails.setEmail(jwtSubject[1]);
         String role_str = jwtUtil.getRoleFromToken(token);
         int role_id = 0;
         switch (role_str) {

@@ -29,10 +29,10 @@ public class JwtTokenProvider {
                 role_id_str = "ROLE_USER";
                 break;
         }
-
         return Jwts.builder()
-                .setSubject(String.format("%s,%s", user.getUser_id(), user.getPassword()))
+                .setSubject(String.format("%s", user.getUser_id()))
                 .setIssuer("Talama")
+                .claim("id",user.getUser_id())
                 .claim("roles", role_id_str)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
