@@ -33,7 +33,7 @@ public class CategoryService implements ICategoryService {
     }
 
     public Category updateCategory(Category category) {
-        if (categoryRepository.existsById(category.getId())) {
+        if (categoryRepository.existsById((long)category.getId())) {
             return categoryRepository.saveAndFlush(category);
         }
         return null;
