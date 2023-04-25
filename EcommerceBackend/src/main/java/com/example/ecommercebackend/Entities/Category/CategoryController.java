@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/categories")
 public class CategoryController {
     @Autowired
@@ -23,7 +23,15 @@ public class CategoryController {
     public ResponseData createNewCategory(@RequestBody Category category) {
         return new ResponseData(categoryService.save(category),200, HttpStatus.OK);
     }
-
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @PutMapping("/update/{id}")
+    public ResponseData updateCategory(@PathVariable Long id, @RequestBody Category category) {
+        Optional<Category> categoryOptional = categoryService.findById(id);
+        return categoryOptional.map(category1 -> {
+            category.setId(category1.getId());
+            return new ResponseData(categoryService.save(category), 200, HttpStatus.OK);
+        }).orElseGet(() -> new ResponseData(null, 400, HttpStatus.NOT_FOUND));
+    }
     @GetMapping("/{id}")
     public ResponseData getCategory(@PathVariable Long id) {
         Optional<Category> categoryOptional = categoryService.findById(id);

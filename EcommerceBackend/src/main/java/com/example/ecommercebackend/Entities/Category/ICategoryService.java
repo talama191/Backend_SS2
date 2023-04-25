@@ -1,7 +1,9 @@
 package com.example.ecommercebackend.Entities.Category;
 
-import com.example.ecommercebackend.Entities.Category.Category;
+import jakarta.transaction.Transactional;
 
-public interface ICategoryService extends com.example.ecommercebackend.Category.IGeneralService<Category> {
+public interface ICategoryService extends IGeneralService<Category> {
 
+    @Transactional
+    void deleteBulkCategory(Integer[] ids);
 }
