@@ -65,10 +65,10 @@ public class ProductService {
 
     public List<Product> searchProduct(ProductSearchFilter filter) {
 
-        if (filter.getBrand_ids() == null||filter.getBrand_ids().isEmpty()) {
+        if (filter.getBrand_ids() == null || filter.getBrand_ids().isEmpty()) {
             filter.setBrand_ids(inCaseOfEmptyList);
         }
-        if (filter.getCategory_ids() == null||filter.getCategory_ids().isEmpty()) {
+        if (filter.getCategory_ids() == null || filter.getCategory_ids().isEmpty()) {
             filter.setCategory_ids(inCaseOfEmptyList);
         }
         Pageable pageable;
@@ -96,5 +96,39 @@ public class ProductService {
         List<Product> products = productRepository.findAllByName(filter, pageable);
 
         return products;
+    }
+
+    public int GetTotalPageFromSearchFilter(ProductSearchFilter filter) {
+        if (filter.getBrand_ids() == null || filter.getBrand_ids().isEmpty()) {
+            filter.setBrand_ids(inCaseOfEmptyList);
+        }
+        if (filter.getCategory_ids() == null || filter.getCategory_ids().isEmpty()) {
+            filter.setCategory_ids(inCaseOfEmptyList);
+        }
+        Pageable pageable;
+
+        if (filter.getSortField() == null) {
+            pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+        } else {
+            if (filter.getSortField().isEmpty()) {
+                pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+            } else {
+                if (filter.getSortType() != null || !filter.getSortType().isEmpty()) {
+                    if (filter.getSortType().equals("asc")) {
+                        pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage(), Sort.by(filter.getSortField()).ascending());
+                    } else if (filter.getSortType().equals("des")) {
+                        pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage(), Sort.by(filter.getSortField()).descending());
+                    } else {
+                        pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+                    }
+                } else {
+                    pageable = PageRequest.of(filter.getPageNum(), filter.getPerPage());
+                }
+
+            }
+        }
+        pageable = PageRequest.of(0, 1000);
+        int pageCount = (int) Math.ceil(productRepository.findAllByName(filter, pageable).size() / filter.getPerPage());
+        return pageCount;
     }
 }

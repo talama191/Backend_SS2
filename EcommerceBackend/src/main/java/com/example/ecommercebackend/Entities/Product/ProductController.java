@@ -49,6 +49,11 @@ public class ProductController {
 
         return new ResponseData(products, 200, HttpStatus.OK);
     }
+    @PostMapping("/products/page-count")
+    public ResponseData getTotalPage(@RequestBody ProductSearchFilter filter){
+        int pageCount=productService.GetTotalPageFromSearchFilter(filter);
+        return new ResponseData(pageCount,200,HttpStatus.OK);
+    }
 
     @DeleteMapping("/products/delete")
     public ResponseData deleteProduct(@RequestParam List<Integer> ids) {
