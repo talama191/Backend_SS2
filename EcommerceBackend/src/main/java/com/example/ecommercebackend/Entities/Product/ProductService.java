@@ -65,10 +65,10 @@ public class ProductService {
 
     public List<Product> searchProduct(ProductSearchFilter filter) {
 
-        if (filter.getBrand_ids() == null) {
+        if (filter.getBrand_ids() == null||filter.getBrand_ids().isEmpty()) {
             filter.setBrand_ids(inCaseOfEmptyList);
         }
-        if (filter.getCategory_ids() == null) {
+        if (filter.getCategory_ids() == null||filter.getCategory_ids().isEmpty()) {
             filter.setCategory_ids(inCaseOfEmptyList);
         }
         Pageable pageable;

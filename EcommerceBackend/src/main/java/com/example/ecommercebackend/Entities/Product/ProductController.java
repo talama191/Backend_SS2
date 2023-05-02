@@ -43,7 +43,7 @@ public class ProductController {
         return new ResponseData(returnProduct, 200, HttpStatus.OK);
     }
 
-    @GetMapping("/products/search")
+    @PostMapping("/products/search")
     public ResponseData searchProduct(@RequestBody ProductSearchFilter filter) {
         List<Product> products = productService.searchProduct(filter);
 
