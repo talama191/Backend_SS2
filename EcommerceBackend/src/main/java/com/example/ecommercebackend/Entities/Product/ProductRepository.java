@@ -21,7 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("delete from Product p where p.id in(:integers)")
     void deleteAllIds(List<Integer> integers);
 
-    @Query("select p from Product p where p.name like (:#{#filter.getKeyword()}) and p.category.id in (:#{#filter.category_ids} ) and p.brand.id in(:#{#filter.category_ids} ) ")
+    @Query("select p from Product p where p.name like (:#{#filter.getKeyword()}) and p.category.id in (:#{#filter.category_ids} ) and p.brand.id in(:#{#filter.brand_ids} ) ")
     List<Product> findAllByName(@Param("filter") ProductSearchFilter filter, Pageable pageable);
 
 //    @Query(value ="select p from Product p where p.id in(:#{filter.keyword})" +
