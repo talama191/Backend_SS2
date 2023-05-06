@@ -128,7 +128,8 @@ public class ProductService {
             }
         }
         pageable = PageRequest.of(0, 1000);
-        int pageCount = (int) Math.ceil(productRepository.findAllByName(filter, pageable).size() / filter.getPerPage());
+        int pageCount = (int) Math.ceil((float) productRepository.findAllByName(filter, pageable).size() / (float) filter.getPerPage());
+        System.out.println("total page " + pageCount + " all list " + productRepository.findAllByName(filter, pageable).size() + " filter " + filter.getPerPage());
         return pageCount;
     }
 }
