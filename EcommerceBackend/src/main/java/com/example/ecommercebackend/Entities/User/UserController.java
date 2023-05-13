@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     UserService userService;
@@ -33,9 +33,10 @@ public class UserController {
     }
 
     @GetMapping("/user/get")
+//    @CrossOrigin("*")
     public ResponseData getUserByUsername(@RequestParam String username) {
 
-        User user = userService.getUserByEmail(username);
+        User user = userService.getUserByUsername(username);
         user.setPassword("");
         if (user == null) {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
@@ -88,6 +89,7 @@ public class UserController {
         }
         if (userService.getUserByUsername(user.getUsername()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole_id(2);
             userService.createUser(user);
             userService.setUserRole(user.getUser_id(), 2);
             user.setPassword("");
@@ -104,6 +106,7 @@ public class UserController {
         if (userService.getUserByUsername(user.getUsername()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.createUser(user);
+            user.setRole_id(1);
             userService.setUserRole(user.getUser_id(), 1);
             user.setPassword("");
             return new ResponseData(user, 201, HttpStatus.CREATED);
