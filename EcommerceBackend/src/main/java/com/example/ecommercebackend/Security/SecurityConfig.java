@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .requestMatchers("/users").hasRole("ADMIN")
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/user/**").hasRole("ADMIN")
+                .requestMatchers("/user/**").authenticated()
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/user-auth/authenticate").permitAll()
