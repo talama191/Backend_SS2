@@ -15,9 +15,10 @@ public class CartLine {
     @Column(columnDefinition = "integer default 0")
     private Integer unit_price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
-    private Cart cart;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
+//    private Cart cart;
+    @Transient
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
@@ -50,13 +51,13 @@ public class CartLine {
         this.unit_price = unit_price;
     }
 
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
+//    public Cart getCart() {
+//        return cart;
+//    }
+//
+//    public void setCart(Cart cart) {
+//        this.cart = cart;
+//    }
 
     public Product getProduct() {
         return product;

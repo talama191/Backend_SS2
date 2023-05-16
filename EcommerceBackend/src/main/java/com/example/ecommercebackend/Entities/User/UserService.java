@@ -39,6 +39,9 @@ public class UserService implements UserDetailsService {
         User user = userRepository.getUserByUsername(username);
         return user;
     }
+    public User getUserByUserID(int user_id){
+        return userRepository.getUserByUserID(user_id);
+    }
 
     public User updateUser(User user) {
         if (userRepository.existsById(user.getUser_id())) {

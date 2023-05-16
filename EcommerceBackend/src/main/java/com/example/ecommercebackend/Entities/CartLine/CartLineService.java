@@ -11,22 +11,28 @@ public class CartLineService {
     @Autowired
     CartLineRepository cartLineRepository;
 
-    public List<CartLine> getAllCartLines(){
+    public List<CartLine> getAllCartLines() {
         return cartLineRepository.findAll();
     }
-    public List<CartLine> getCartLinesByCartID(int cart_id){
+
+    public void CreateCartLine(CartLine cartLine) {
+        cartLineRepository.save(cartLine);
+    }
+
+    public List<CartLine> getCartLinesByCartID(int cart_id) {
         return cartLineRepository.getCartLinesByCart_id(cart_id);
     }
+
     @Transactional
-    public boolean deleteCartLinesByCartID(int cart_id){
-        try{
+    public boolean deleteCartLinesByCartID(int cart_id) {
+        try {
 
             cartLineRepository.deleteCartLinesByCartID(cart_id);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
-        return  true;
+        return true;
     }
 
 }

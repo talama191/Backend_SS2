@@ -1,5 +1,6 @@
 package com.example.ecommercebackend.Entities.Cart;
 
+import com.example.ecommercebackend.Entities.User.User;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,13 +9,15 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cart_id;
-    private int user_id;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "user_id",referencedColumnName = "user_id")
+    private User user_id;
 
-    public int getUser_id() {
+    public User getUser() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser(User user_id) {
         this.user_id = user_id;
     }
 
