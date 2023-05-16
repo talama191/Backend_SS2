@@ -54,11 +54,15 @@ public class UserController {
         try {
             User dbUser = userService.getUserByUsername(user.getUsername());
             int user_role = userService.getUserRoleByUserID(dbUser.getUser_id());
+            if (dbUser == null) {
+                return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+            } else {
+                String accessToken = jwtTokenProvider.generateAccessToken(dbUser, user_role);
+                AuthResponse response = new AuthResponse(user.getEmail(), accessToken, user_role);
 
-            String accessToken = jwtTokenProvider.generateAccessToken(dbUser, user_role);
-            AuthResponse response = new AuthResponse(user.getEmail(), accessToken, user_role);
+                return new ResponseData(response, 200, HttpStatus.OK);
+            }
 
-            return new ResponseData(response, 200, HttpStatus.OK);
 
         } catch (BadCredentialsException ex) {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
