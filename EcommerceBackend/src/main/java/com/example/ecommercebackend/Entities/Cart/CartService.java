@@ -54,6 +54,20 @@ public class CartService {
         return cartLineRepository.save(cartLine);
     }
 
+    public CartLine addSingleProductToCurrentCart(int user_id, int product_id) {
+        int cart_id = getActiveCartByUserID(user_id).getCart_id();
+        CartLine cartLine = cartLineRepository.getCartLine(cart_id, product_id);
+        if (cartLine == null) {
+            cartLine = new CartLine();
+            cartLine.setQuantity(1);
+            cartLine.setProduct_id(product_id);
+            cartLine.setCart_id(cart_id);
+        } else {
+            cartLine.setQuantity(cartLine.getQuantity() + 1);
+        }
+        return cartLineRepository.save(cartLine);
+    }
+
     public Cart getCartByCartID(int cart_id) {
         return cartRepository.getCartByID(cart_id);
     }
@@ -63,5 +77,17 @@ public class CartService {
         User user = userRepository.getUserByUserID(user_id);
         new_cart.setUser(user);
         return cartRepository.save(new_cart);
+    }
+
+    public Cart setCartStatus(int cart_id, int status) {
+        Cart cart = cartRepository.getCartByID(cart_id);
+        if (cart != null) {
+            if (cart.getCart_status() < status) {
+                return null;
+            }
+            cart.setCart_status(status);
+            return cartRepository.save(cart);
+        }
+        return null;
     }
 }

@@ -95,4 +95,24 @@ public class CartController {
             return new ResponseData(cartLine, 200, HttpStatus.OK);
         }
     }
+
+    @PostMapping("/cart/modify_add_single")
+    public ResponseData modifyProductOfCurrentCartByUserID(@RequestParam int user_id, @RequestParam int product_id) {
+        CartLine cartLine = cartService.addSingleProductToCurrentCart(user_id, product_id);
+        if (cartLine == null) {
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseData(cartLine, 200, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/cart/set_status")
+    public ResponseData setCartStatus(@RequestParam int cart_id, @RequestParam int cart_status) {
+        Cart cart = cartService.setCartStatus(cart_id, cart_status);
+        if (cart == null) {
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseData(cart, 200, HttpStatus.OK);
+        }
+    }
 }
