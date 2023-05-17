@@ -3,6 +3,7 @@ package com.example.ecommercebackend.Entities.Cart;
 import com.example.ecommercebackend.Entities.CartLine.CartLine;
 import com.example.ecommercebackend.Entities.CartLine.CartLineService;
 import com.example.ecommercebackend.Entities.DummyEntity.DummyCart;
+import com.example.ecommercebackend.Entities.Product.ProductService;
 import com.example.ecommercebackend.Entities.User.UserService;
 import com.example.ecommercebackend.Response.ResponseData;
 import org.hibernate.cfg.NotYetImplementedException;
@@ -23,6 +24,8 @@ public class CartController {
     CartLineService cartLineService;
     @Autowired
     UserService userService;
+    @Autowired
+    ProductService productService;
 
     @GetMapping("/cart")
     public ResponseData getCartsByUserID(@RequestParam int user_id) {
@@ -39,6 +42,7 @@ public class CartController {
         List<Integer> productIds = new ArrayList<>();
         for (int i = 0; i < cartLines.size(); i++) {
             productIds.add(cartLines.get(i).getProduct_id());
+            cartLines.get(i).setProduct(productService.getProductByID(cartLines.get(i).getProduct_id()));
         }
         Cart cart = cartService.getCartByCartID(cart_id);
         if (cartLines == null) {
