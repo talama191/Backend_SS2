@@ -5,6 +5,7 @@ import com.example.ecommercebackend.Entities.CartLine.CartLineService;
 import com.example.ecommercebackend.Entities.DummyEntity.DummyCart;
 import com.example.ecommercebackend.Entities.User.UserService;
 import com.example.ecommercebackend.Response.ResponseData;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -70,5 +71,28 @@ public class CartController {
             cartLineService.CreateCartLine(dummyCart.getCartLineList().get(i));
         }
         return new ResponseData(cartLineService.getCartLinesByCartID(cart.getCart_id()), 200, HttpStatus.OK);
+    }
+
+    @GetMapping("/cart/get_current")
+    public ResponseData getCurrentCartByUserID(@RequestParam int user_id) {
+        Cart cart = cartService.getActiveCartByUserID(user_id);
+        if (cart == null) {
+            cart = cartService.createNewCart(user_id);
+        }
+        return new ResponseData(cart, 200, HttpStatus.OK);
+    }
+
+    //    @PostMapping("/cart/add_product")
+//    public ResponseData addProductToCurrentCartByUserID(@RequestParam int user_id, @RequestParam int product_id) {
+//        throw new NotYetImplementedException();
+//    }
+    @PostMapping("/cart/modify")
+    public ResponseData modifyProductOfCurrentCartByUserID(@RequestParam int user_id, @RequestParam int product_id, @RequestParam int quantity) {
+        CartLine cartLine = cartService.modifyProductToCurrentCart(user_id, product_id, quantity);
+        if (cartLine == null) {
+            return new ResponseData(null, 202, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseData(cartLine, 200, HttpStatus.OK);
+        }
     }
 }

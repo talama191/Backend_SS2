@@ -15,6 +15,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query(value = "select * from product p where p.category_id=?1", nativeQuery = true)
     public List<Product> getProductsByCategory(int category);
 
+    @Query(value = "select * from product p where p.id=?1", nativeQuery = true)
+    public Product getProductByID(int id);
+
     @Transactional
     @Modifying
 //    @Query(value = "delete from Product p  where p.id=?1")

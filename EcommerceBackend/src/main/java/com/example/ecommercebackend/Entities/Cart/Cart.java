@@ -9,9 +9,18 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cart_id;
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_id",referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user_id;
+    private int cart_status;
+
+    public int getCart_status() {
+        return cart_status;
+    }
+
+    public void setCart_status(int cart_status) {
+        this.cart_status = cart_status;
+    }
 
     public User getUser() {
         return user_id;

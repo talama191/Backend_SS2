@@ -22,6 +22,10 @@ public class ProductService {
         return products;
     }
 
+    public Product getProductByID(int id) {
+        return productRepository.getProductByID(id);
+    }
+
     public List<Product> getProductsByCategory(int category_id) {
         List<Product> products = new ArrayList<>();
         products = productRepository.getProductsByCategory(category_id);

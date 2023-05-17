@@ -25,6 +25,16 @@ public class ProductController {
         return new ResponseData(products, 200, HttpStatus.OK);
     }
 
+    @GetMapping("/products/get")
+    public ResponseData getProductByID(@RequestParam int id) {
+        Product product = productService.getProductByID(id);
+        if (product == null) {
+            return new ResponseData(null, 400, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseData(product, 200, HttpStatus.OK);
+        }
+    }
+
     @PostMapping("/products/add")
     public ResponseData addProduct(@RequestBody Product product) {
         Product returnProduct = productService.addProduct(product);
@@ -49,10 +59,11 @@ public class ProductController {
 
         return new ResponseData(products, 200, HttpStatus.OK);
     }
+
     @PostMapping("/products/page-count")
-    public ResponseData getTotalPage(@RequestBody ProductSearchFilter filter){
-        int pageCount=productService.GetTotalPageFromSearchFilter(filter);
-        return new ResponseData(pageCount,200,HttpStatus.OK);
+    public ResponseData getTotalPage(@RequestBody ProductSearchFilter filter) {
+        int pageCount = productService.GetTotalPageFromSearchFilter(filter);
+        return new ResponseData(pageCount, 200, HttpStatus.OK);
     }
 
     @DeleteMapping("/products/delete")
