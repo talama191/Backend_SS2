@@ -7,6 +7,8 @@ import com.example.ecommercebackend.Entities.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -84,6 +86,12 @@ public class CartService {
         if (cart != null) {
             if (cart.getCart_status() > status) {
                 return null;
+            }
+            Date date = new Date();
+            if (status == 1) {
+                cart.setOrdered_at(new Timestamp(date.getTime()));
+            } else {
+                cart.setCompleted_at(new Timestamp(date.getTime()));
             }
             cart.setCart_status(status);
             return cartRepository.save(cart);
