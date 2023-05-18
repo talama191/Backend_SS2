@@ -82,7 +82,7 @@ public class CartService {
     public Cart setCartStatus(int cart_id, int status) {
         Cart cart = cartRepository.getCartByID(cart_id);
         if (cart != null) {
-            if (cart.getCart_status() < status) {
+            if (cart.getCart_status() > status) {
                 return null;
             }
             cart.setCart_status(status);

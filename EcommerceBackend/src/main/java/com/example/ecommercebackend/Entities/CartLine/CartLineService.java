@@ -1,5 +1,7 @@
 package com.example.ecommercebackend.Entities.CartLine;
 
+import com.example.ecommercebackend.Entities.Product.ProductRepository;
+import com.example.ecommercebackend.Entities.Product.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import java.util.List;
 public class CartLineService {
     @Autowired
     CartLineRepository cartLineRepository;
+    @Autowired
+    ProductService productService;
 
     public List<CartLine> getAllCartLines() {
         return cartLineRepository.findAll();
@@ -20,7 +24,12 @@ public class CartLineService {
     }
 
     public List<CartLine> getCartLinesByCartID(int cart_id) {
-        return cartLineRepository.getCartLinesByCart_id(cart_id);
+        List<CartLine> cartLines = cartLineRepository.getCartLinesByCart_id(cart_id);
+        for (int i = 0; i < cartLines.size(); i++) {
+            cartLines.get(i).setProduct(productService.getProductByID(cartLines.get(i).getProduct_id()));
+        }
+        return cartLines;
+
     }
 
     @Transactional
