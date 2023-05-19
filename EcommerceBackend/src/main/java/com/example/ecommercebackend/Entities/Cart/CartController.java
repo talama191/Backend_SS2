@@ -6,7 +6,6 @@ import com.example.ecommercebackend.Entities.DummyEntity.DummyCart;
 import com.example.ecommercebackend.Entities.Product.ProductService;
 import com.example.ecommercebackend.Entities.User.UserService;
 import com.example.ecommercebackend.Response.ResponseData;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -101,8 +100,8 @@ public class CartController {
     }
 
     @PostMapping("/cart/modify_add_single")
-    public ResponseData modifyProductOfCurrentCartByUserID(@RequestParam int user_id, @RequestParam int product_id) {
-        CartLine cartLine = cartService.addSingleProductToCurrentCart(user_id, product_id);
+    public ResponseData addProductToCurrentCartByUserID(@RequestParam int user_id, @RequestParam int product_id, @RequestParam int quantity) {
+        CartLine cartLine = cartService.addProductsToCurrentCart(user_id, product_id, quantity);
         if (cartLine == null) {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         } else {

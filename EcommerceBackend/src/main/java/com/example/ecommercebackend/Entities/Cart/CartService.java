@@ -56,16 +56,19 @@ public class CartService {
         return cartLineRepository.save(cartLine);
     }
 
-    public CartLine addSingleProductToCurrentCart(int user_id, int product_id) {
+    public CartLine addProductsToCurrentCart(int user_id, int product_id, int quantity) {
+        if(quantity<=0){
+            return null;
+        }
         int cart_id = getActiveCartByUserID(user_id).getCart_id();
         CartLine cartLine = cartLineRepository.getCartLine(cart_id, product_id);
         if (cartLine == null) {
             cartLine = new CartLine();
-            cartLine.setQuantity(1);
+            cartLine.setQuantity(quantity);
             cartLine.setProduct_id(product_id);
             cartLine.setCart_id(cart_id);
         } else {
-            cartLine.setQuantity(cartLine.getQuantity() + 1);
+            cartLine.setQuantity(cartLine.getQuantity() + quantity);
         }
         return cartLineRepository.save(cartLine);
     }

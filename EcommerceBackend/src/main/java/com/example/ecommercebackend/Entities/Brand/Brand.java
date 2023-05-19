@@ -10,6 +10,16 @@ public class Brand {
     private Integer id;
     private String name;
 
+    private String icon;
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     public Integer getId() {
         return id;
     }
