@@ -67,7 +67,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/products/delete")
-    public ResponseData deleteProduct(@RequestParam List<Integer> ids) {
+    public ResponseData deleteProduct(@RequestBody List<Integer> ids) {
         boolean isLineDeleted = productService.deleteProduct(ids);
         if (!isLineDeleted) {
             return new ResponseData(false, 400, HttpStatus.BAD_REQUEST);
