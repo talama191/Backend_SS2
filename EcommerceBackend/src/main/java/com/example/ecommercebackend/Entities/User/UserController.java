@@ -72,14 +72,14 @@ public class UserController {
 
     @PostMapping("/user/update")
     public ResponseData updateUser(@RequestBody User user) {
-        if (user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
+        if (user.getEmail().isEmpty()) {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
         String originalPassword = user.getPassword();
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         userService.updateUser(user);
-        user.setPassword(originalPassword);
+        user.setPassword("");
         return new ResponseData(user, 200, HttpStatus.OK);
     }
 
