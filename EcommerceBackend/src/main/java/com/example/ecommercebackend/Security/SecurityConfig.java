@@ -98,7 +98,13 @@ public class SecurityConfig {
                 .requestMatchers("/brands/**").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/cart_lines/**").permitAll();
+                .requestMatchers("/cart_lines/**").permitAll()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/checkout").permitAll()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/checkout_success").permitAll();
         http.exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {

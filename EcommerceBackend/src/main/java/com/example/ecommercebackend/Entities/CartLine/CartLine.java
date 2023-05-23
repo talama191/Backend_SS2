@@ -31,6 +31,17 @@ public class CartLine {
     @Id
     @Column(insertable=false, updatable=false)
     private int product_id;
+
+    private int paymentMethod;
+
+    public int getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(int paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     public CartLine() {
 
     }
