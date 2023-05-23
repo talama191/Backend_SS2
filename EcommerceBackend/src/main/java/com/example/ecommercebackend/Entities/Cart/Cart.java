@@ -2,6 +2,7 @@ package com.example.ecommercebackend.Entities.Cart;
 
 import com.example.ecommercebackend.Entities.User.User;
 import jakarta.persistence.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.sql.Timestamp;
 
@@ -18,6 +19,9 @@ public class Cart {
 
     private Timestamp completed_at;
     private Timestamp ordered_at;
+    private String address;
+    private double phoneNumber;
+    private boolean hasPaid;
 
     public Timestamp getCompleted_at() {
         return completed_at;
@@ -57,5 +61,29 @@ public class Cart {
 
     public int getCart_id() {
         return cart_id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public double getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(double phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isHasPaid() {
+        return hasPaid;
+    }
+
+    public void setHasPaid(boolean hasPaid) {
+        this.hasPaid = hasPaid;
     }
 }

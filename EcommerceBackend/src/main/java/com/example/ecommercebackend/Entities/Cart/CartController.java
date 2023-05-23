@@ -99,6 +99,17 @@ public class CartController {
         }
     }
 
+    @PostMapping("/cart/order_without_pay")
+    public ResponseData OrderWithoutPay(@RequestBody Cart cart, @RequestParam Integer cart_id) {
+        cart.setCart_id(cart_id);
+        Cart newCart = cartService.OrderWithoutPay(cart);
+        if (newCart == null) {
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseData(newCart, 200, HttpStatus.OK);
+        }
+    }
+
     @PostMapping("/cart/modify_add_single")
     public ResponseData addProductToCurrentCartByUserID(@RequestParam int user_id, @RequestParam int product_id, @RequestParam int quantity) {
         CartLine cartLine = cartService.addProductsToCurrentCart(user_id, product_id, quantity);

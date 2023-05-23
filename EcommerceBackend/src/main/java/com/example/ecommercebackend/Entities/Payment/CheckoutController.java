@@ -1,6 +1,9 @@
 package com.example.ecommercebackend.Entities.Payment;
 
 import com.example.ecommercebackend.Entities.Cart.Cart;
+import com.example.ecommercebackend.Entities.Cart.CartRepository;
+import com.example.ecommercebackend.Entities.Cart.CartService;
+import com.example.ecommercebackend.Entities.CartLine.CartLineService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +19,7 @@ import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import net.minidev.json.JSONObject;
 import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpStatus;
@@ -24,10 +28,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
 public class CheckoutController {
+
+    @Autowired
+    CartService cartService;
+    @Autowired
+    CartRepository cartRepository;
+    @Autowired
+    CartLineService cartLineService;
 
     //    @Value("${STRIPE_PUBLIC_KEY}")
 //    private String stripePublicKey;
@@ -40,7 +53,7 @@ public class CheckoutController {
     }
 
     @PostMapping("/checkout")
-    public String CheckoutTest(@RequestBody String cart_id) throws StripeException {
+    public String CheckoutTest(@RequestBody Cart cart, @RequestParam Integer cart_id) throws StripeException {
         Stripe.apiKey = "sk_test_51NAPhSDNDkGZR7LmgrgVxe72tZOA9NLrnoDSIIuXO1yeWF0rAPdgvppwRJC8IMka19ZcL1k56Tnjqmq9cYghbyhw00EShaFrD1";
         CustomerCreateParams customerParams = new CustomerCreateParams.Builder().build();
         Customer customer = Customer.create(customerParams);
@@ -51,9 +64,11 @@ public class CheckoutController {
                 PaymentIntentCreateParams.builder()
                         .setCustomer(customer.getId())
                         .setSetupFutureUsage(PaymentIntentCreateParams.SetupFutureUsage.OFF_SESSION)
-                        .setAmount(1000L)
+                        .setAmount((long) cartLineService.getCartTotalPriceByCardID(cart_id)*100)
                         .setCurrency("usd")
-                        .putMetadata("cart_id", cart_id)
+                        .putMetadata("cart_id", cart_id.toString())
+                        .putMetadata("address", cart.getAddress())
+                        .putMetadata("phoneNumber", String.valueOf(cart.getPhoneNumber()))
                         .setAutomaticPaymentMethods(
                                 PaymentIntentCreateParams.AutomaticPaymentMethods
                                         .builder()
@@ -71,7 +86,6 @@ public class CheckoutController {
     @RequestMapping("/checkout_success")
     public ResponseEntity<String> webhook(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) throws JsonProcessingException {
         Event event = null;
-        System.out.println("called");
         try {
             event = Webhook.constructEvent(payload, sigHeader, "whsec_c1bd3bd882a2c2ec215a5f98531547359c9620650e116c1c6ca55c6210e6d2e8");
         } catch (SignatureVerificationException e) {
@@ -88,6 +102,7 @@ public class CheckoutController {
             // Refer to the Javadoc documentation on `EventDataObjectDeserializer` for
             // instructions on how to handle this case, or return an error here.
         }
+        Date date = new Date();
 //        JSONParser parser=new JSONParser(stripeObject.toJson());
         switch (event.getType()) {
             case "payment_intent.succeeded":
@@ -97,9 +112,14 @@ public class CheckoutController {
                 JsonNode metaDataNode = mapper.readTree(jsonNode.get("metadata").toString());
 //                System.out.println(jsonNode.get("cart_id"));
                 ObjectNode objectNode = (ObjectNode) jsonNode.get("metadata");
-                TextNode textNode = (TextNode) objectNode.get("cart_id");
-                ObjectNode dataTextNode = (ObjectNode) mapper.readTree(textNode.asText()).get("data");
-                String cartID = dataTextNode.get("cart_id").toString();
+                int cart_id = objectNode.get("cart_id").asInt();
+                Cart cart = cartService.getCartByCartID(cart_id);
+                cart.setOrdered_at(new Timestamp(date.getTime()));
+                cart.setCart_status(1);
+                cart.setAddress(objectNode.get("address").asText());
+                cart.setPhoneNumber(objectNode.get("phoneNumber").asDouble());
+                cart.setHasPaid(true);
+                cartRepository.save(cart);
                 break;
             case "payment_method.attached":
                 // ...

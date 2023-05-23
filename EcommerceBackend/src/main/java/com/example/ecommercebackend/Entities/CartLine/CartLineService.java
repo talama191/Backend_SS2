@@ -1,5 +1,6 @@
 package com.example.ecommercebackend.Entities.CartLine;
 
+import com.example.ecommercebackend.Entities.Product.Product;
 import com.example.ecommercebackend.Entities.Product.ProductRepository;
 import com.example.ecommercebackend.Entities.Product.ProductService;
 import jakarta.transaction.Transactional;
@@ -29,7 +30,16 @@ public class CartLineService {
             cartLines.get(i).setProduct(productService.getProductByID(cartLines.get(i).getProduct_id()));
         }
         return cartLines;
+    }
 
+    public Integer getCartTotalPriceByCardID(int cart_id) {
+        List<CartLine> cartLines = cartLineRepository.getCartLinesByCart_id(cart_id);
+        Integer total = 0;
+        for (int i = 0; i < cartLines.size(); i++) {
+            Product product = productService.getProductByID(cartLines.get(i).getProduct_id());
+            total += product.getPrice() * cartLines.get(i).getQuantity();
+        }
+        return total;
     }
 
     @Transactional

@@ -57,7 +57,7 @@ public class CartService {
     }
 
     public CartLine addProductsToCurrentCart(int user_id, int product_id, int quantity) {
-        if(quantity<=0){
+        if (quantity <= 0) {
             return null;
         }
         int cart_id = getActiveCartByUserID(user_id).getCart_id();
@@ -100,5 +100,22 @@ public class CartService {
             return cartRepository.save(cart);
         }
         return null;
+    }
+
+    public Cart OrderWithoutPay(Cart cart) {
+        Cart dbCart = cartRepository.getCartByID(cart.getCart_id());
+        if (dbCart == null) {
+            return null;
+        }
+        Date date = new Date();
+
+        dbCart.setOrdered_at(new Timestamp(date.getTime()));
+        dbCart.setHasPaid(false);
+        dbCart.setPhoneNumber(cart.getPhoneNumber());
+        dbCart.setAddress(cart.getAddress());
+        dbCart.setCart_status(1);
+        cartRepository.save(dbCart);
+
+        return dbCart;
     }
 }
