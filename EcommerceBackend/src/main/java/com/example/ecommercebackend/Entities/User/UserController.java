@@ -3,6 +3,8 @@ package com.example.ecommercebackend.Entities.User;
 import com.example.ecommercebackend.Response.ResponseData;
 import com.example.ecommercebackend.Security.AuthResponse;
 import com.example.ecommercebackend.Security.JwtTokenProvider;
+import com.example.ecommercebackend.Utils.Utils;
+import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     UserService userService;
+    private static String salt = "test";
 
     @GetMapping("/users")
     public ResponseData getAllUsers() {
@@ -53,6 +56,12 @@ public class UserController {
     public ResponseData AuthenticateUser(@RequestBody User user) {
         try {
             User dbUser = userService.getUserByUsername(user.getUsername());
+            String dbPassword = dbUser.getPassword();
+            String userPassword = Utils.get_SHA_512_SecurePassword(user.getPassword(), salt);
+            boolean testPassword = dbPassword.equals(userPassword);
+            if (!testPassword) {
+                return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+            }
             int user_role = userService.getUserRoleByUserID(dbUser.getUser_id());
             if (dbUser == null) {
                 return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
@@ -76,15 +85,30 @@ public class UserController {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
         String originalPassword = user.getPassword();
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        String hashedPassword = Utils.get_SHA_512_SecurePassword(user.getPassword(), salt);
         user.setPassword(hashedPassword);
         userService.updateUser(user);
         user.setPassword("");
         return new ResponseData(user, 200, HttpStatus.OK);
     }
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    @PostMapping("/user/update_password")
+    public ResponseData updateUserPassword(@RequestParam Integer user_id, @RequestParam String password) {
+        if (password.isEmpty() || password == null) {
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+        }
+//        String originalPassword = user.getPassword();
+        User user = userService.getUserByUserID(user_id);
+        if (user == null) {
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+        }
+        String hashedPassword = Utils.get_SHA_512_SecurePassword(password, salt);
+        user.setPassword(hashedPassword);
+        userService.updateUser(user);
+        user.setPassword("");
+        return new ResponseData(user, 200, HttpStatus.OK);
+    }
+
 
     @PostMapping("/user-register/register")
     public ResponseData createUser(@RequestBody User user) {
@@ -92,7 +116,7 @@ public class UserController {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
         if (userService.getUserByUsername(user.getUsername()) == null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPassword(Utils.get_SHA_512_SecurePassword(user.getPassword(), salt));
             user.setRole_id(2);
             userService.createUser(user);
             userService.setUserRole(user.getUser_id(), 2);
@@ -108,7 +132,7 @@ public class UserController {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
         if (userService.getUserByUsername(user.getUsername()) == null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPassword(Utils.get_SHA_512_SecurePassword(user.getPassword(), salt));
             userService.createUser(user);
             user.setRole_id(1);
             userService.setUserRole(user.getUser_id(), 1);
