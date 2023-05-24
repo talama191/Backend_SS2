@@ -93,8 +93,8 @@ public class UserController {
     }
 
     @PostMapping("/user/update_password")
-    public ResponseData updateUserPassword(@RequestParam Integer user_id, @RequestParam String password) {
-        if (password.isEmpty() || password == null) {
+    public ResponseData updateUserPassword(@RequestParam Integer user_id, @RequestParam String new_password, @RequestParam String old_password) {
+        if (new_password.isEmpty() || new_password == null || old_password == null) {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
 //        String originalPassword = user.getPassword();
@@ -102,8 +102,13 @@ public class UserController {
         if (user == null) {
             return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
         }
-        String hashedPassword = Utils.get_SHA_512_SecurePassword(password, salt);
-        user.setPassword(hashedPassword);
+        String hashedOldPassword = Utils.get_SHA_512_SecurePassword(old_password, salt);
+        String hashedNewPassword = Utils.get_SHA_512_SecurePassword(new_password, salt);
+        boolean match = hashedOldPassword.equals(user.getPassword());
+        if (!match) {
+            return new ResponseData(null, 400, HttpStatus.BAD_REQUEST);
+        }
+        user.setPassword(hashedNewPassword);
         userService.updateUser(user);
         user.setPassword("");
         return new ResponseData(user, 200, HttpStatus.OK);
