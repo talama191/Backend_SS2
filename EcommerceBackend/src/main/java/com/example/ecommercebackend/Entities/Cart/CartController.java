@@ -34,6 +34,14 @@ public class CartController {
         }
         return new ResponseData(carts, 200, HttpStatus.OK);
     }
+    @GetMapping("/cart/all")
+    public ResponseData getAllCart() {
+        List<Cart> carts = cartService.getAllCarts();
+        if (carts == null || carts.isEmpty()) {
+            return new ResponseData(null, 404, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseData(carts, 200, HttpStatus.OK);
+    }
 
     @GetMapping("/cart/detail")
     public ResponseData getCartDetailByCartID(@RequestParam int cart_id) {

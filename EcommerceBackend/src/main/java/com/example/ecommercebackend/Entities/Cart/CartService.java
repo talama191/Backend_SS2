@@ -24,6 +24,9 @@ public class CartService {
     public List<Cart> getCartsByUserID(int user_id) {
         return cartRepository.getCartByUserID(user_id);
     }
+    public List<Cart > getAllCarts(){
+        return cartRepository.findAll();
+    }
 
     public Cart getActiveCartByUserID(int user_id) {
         List<Cart> carts = cartRepository.getCartByUserID(user_id);
